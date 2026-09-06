@@ -2,9 +2,9 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Other pieces do not move; turns and king safety are outside this movement-only implementation.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Kings can move to safe adjoining squares, capture undefended enemy pieces, and castle on either side when their movement history, empty path, and attack checks permit it. Opponent attacks include pawns, knights, sliding pieces, and kings, including pinned attackers.
 
-The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces.
+Select a king, then a highlighted destination (mouse, touch, or keyboard). The starting kings are blocked; **Practice king moves** loads an open position for both colors. **Reset starting position** restores the starting position and movement history. Bishop movement from main is also available: select a bishop to move along an unobstructed diagonal or capture an opposing piece. **Practice bishop movement** opens its diagonals. Rooks relocate as part of castling; turns and other piece moves remain outside scope.
 
 ## Run
 
@@ -40,6 +40,12 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Desktop board with all 32 pieces](docs/screenshots/chessboard-desktop.png)
 
 ![Mobile board with all 32 pieces](docs/screenshots/chessboard-mobile.png)
+
+## King movement proof
+
+![Selected king with safe moves and castling destinations](docs/screenshots/king-legal-moves.png)
+
+![White kingside and black queenside castling](docs/screenshots/king-castling.png)
 
 ## Bishop movement proof
 

@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Chessboard from "./chessboard";
-import { moveBishop, practiceBoard, squareName, startingBoard } from "./bishop";
+import { kingMoves, moveKing, practiceBoard as kingPracticeBoard, startingBoard, type Board } from "./king";
+import { moveBishop, practiceBoard, squareName } from "./bishop";
 
 export default function BishopGame() {
-  const [board, setBoard] = useState(startingBoard);
+  const [board, setBoard] = useState<Board>(startingBoard);
   const [selected, setSelected] = useState<number | null>(null);
-  const [message, setMessage] = useState("Select a bishop, then a highlighted diagonal square.");
+  const [message, setMessage] = useState("Select a bishop or king, then a highlighted square.");
 
   function selectSquare(index: number) {
     if (selected !== null) {
@@ -16,25 +17,36 @@ export default function BishopGame() {
         setMessage("Selection cleared.");
         return;
       }
-      const next = moveBishop(board, selected, index);
-      if (next !== board) {
+      const isKing = board[selected]?.type === "king";
+      const next = isKing ? moveKing(board, selected, index) : moveBishop(board, selected, index);
+      if (next && next !== board) {
         setBoard(next);
         setSelected(null);
-        setMessage(`Bishop moved from ${squareName(selected)} to ${squareName(index)}.`);
+        setMessage(isKing
+          ? `${board[selected]!.color} king moved from ${squareName(selected)} to ${squareName(index)}${Math.abs(index - selected) === 2 ? " (castling)" : ""}.`
+          : `Bishop moved from ${squareName(selected)} to ${squareName(index)}.`);
         return;
       }
     }
-    if (board[index]?.type === "bishop") {
+    if (board[index]?.type === "king") {
+      setSelected(index);
+      setMessage(kingMoves(board, index).length ? "Choose a highlighted square." : "This king has no legal moves.");
+    } else if (board[index]?.type === "bishop") {
       setSelected(index);
       setMessage(`Bishop on ${squareName(index)} selected. Choose a highlighted diagonal square.`);
     } else {
-      setMessage(selected === null ? "Select a bishop to move." : "Invalid move. Choose an unobstructed diagonal square.");
+      setMessage(selected === null ? "Select a bishop or king to move." : "Invalid move. Choose a highlighted square.");
     }
   }
 
   return (
     <>
       <div className="board-controls">
+        <button type="button" onClick={() => {
+          setBoard(kingPracticeBoard());
+          setSelected(null);
+          setMessage("Practice: move either king or castle. Select a king.");
+        }}>Practice king moves</button>
         <button type="button" onClick={() => {
           setBoard(practiceBoard());
           setSelected(null);

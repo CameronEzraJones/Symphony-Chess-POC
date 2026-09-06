@@ -38,3 +38,33 @@ test('bishop rules drive accessible selection, destinations and the rendered mov
   assert.match(moved, /aria-label="g7: white bishop"/);
   assert.doesNotMatch(moved, /role="img" aria-label="black bishop"/);
 });
+
+test('legal king transition renders relocated king and rook with accessible square names', () => {
+  const { BoardView } = require('../../.test-build/chessboard.js');
+  const { practiceBoard, moveKing, kingMoves } = require('../../.test-build/king.js');
+  const board = practiceBoard();
+  const selected = renderToStaticMarkup(React.createElement(BoardView, {board,selected:60,moves:kingMoves(board,60)}));
+  assert.match(selected, /aria-label="g1: empty, legal move"/);
+  const html = renderToStaticMarkup(React.createElement(BoardView, {board:moveKing(board,60,62)}));
+  assert.match(html, /aria-label="g1: white king"/);
+  assert.match(html, /aria-label="f1: white rook"/);
+  assert.match(html, /aria-label="h1: empty"/);
+  assert.match(html, /aria-label="e1: empty"/);
+});
+
+
+test('bishop moves preserve castling history and update king attack checks on the shared board', () => {
+  const { practiceBoard, moveKing } = require('../../.test-build/king.js');
+  const { moveBishop } = require('../../.test-build/bishop.js');
+  let board = practiceBoard();
+  board[26] = { color: 'black', type: 'bishop' }; // c5 attacks f2
+  assert.equal(moveKing(board, 60, 53), null);
+  board = moveBishop(board, 26, 19); // d6 clears f2
+  board = moveKing(board, 60, 53);
+  assert.ok(board);
+  board = moveBishop(board, 19, 12);
+  assert.equal(board[53].moved, true);
+  board = moveKing(board, 53, 60);
+  assert.ok(board);
+  assert.equal(moveKing(board, 60, 62), null);
+});

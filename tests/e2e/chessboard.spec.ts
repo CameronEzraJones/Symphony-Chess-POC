@@ -90,6 +90,36 @@ for (const mobile of [false, true]) {
     await page.getByRole("button", { name: "Reset starting position" }).click();
     await expect(page.getByRole("img")).toHaveCount(32);
     await activate("a2");
-    await expect(page.getByRole("status")).toHaveText("Select a bishop to move.");
+    await expect(page.getByRole("status")).toHaveText("Select a bishop or king to move.");
   });
 }
+
+test('king interaction rejects blocked moves, supports keyboard moves, and castles both colors', async ({ page }) => {
+  await page.goto('/');
+  const square = (name: string) => page.getByRole('button', {name: new RegExp(`^${name}:`)});
+  await square('e1').click();
+  await expect(page.getByRole('status')).toHaveText('This king has no legal moves.');
+  await square('e2').click();
+  await expect(square('e1')).toHaveAttribute('aria-label','e1: white king');
+  await page.getByRole('button', {name:'Practice king moves'}).click();
+  await square('e1').focus();
+  await page.keyboard.press('Enter');
+  await expect(square('g1')).toHaveAttribute('data-legal','true');
+  await page.screenshot({path:'docs/screenshots/king-legal-moves.png',fullPage:true});
+  await square('g1').focus();
+  await page.keyboard.press('Enter');
+  await expect(square('g1')).toHaveAttribute('aria-label','g1: white king');
+  await expect(square('f1')).toHaveAttribute('aria-label','f1: white rook');
+  await expect(square('h1')).toHaveAttribute('aria-label','h1: empty');
+  await expect(page.getByRole('status')).toContainText('(castling)');
+  await square('e8').click();
+  await square('c8').click();
+  await expect(square('d8')).toHaveAttribute('aria-label','d8: black rook');
+  await expect(square('c8')).toHaveAttribute('aria-label','c8: black king');
+  await page.screenshot({path:'docs/screenshots/king-castling.png',fullPage:true});
+  await square('g1').click();
+  await square('g2').click();
+  await expect(square('g2')).toHaveAttribute('aria-label','g2: white king');
+  await page.getByRole('button',{name:'Reset starting position'}).click();
+  await expect(page.getByRole('img')).toHaveCount(32);
+});
