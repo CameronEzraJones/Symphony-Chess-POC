@@ -1,4 +1,5 @@
 import { backRank, type PieceColor, type PieceType } from "./piece";
+import { hasClearSlidingPath } from "./sliding-path";
 
 export type BoardPiece = { color: PieceColor; type: PieceType };
 export type Board = readonly (BoardPiece | null)[];
@@ -28,15 +29,8 @@ export function canMoveBishop(board: Board, from: number, to: number): boolean {
   if (![from, to].every(index => Number.isInteger(index) && index >= 0 && index < 64)) return false;
   const piece = board[from];
   if (piece?.type !== "bishop" || from === to) return false;
-  const rowDistance = Math.floor(to / 8) - Math.floor(from / 8);
-  const columnDistance = to % 8 - from % 8;
-  if (Math.abs(rowDistance) !== Math.abs(columnDistance)) return false;
   if (board[to]?.color === piece.color) return false;
-  const step = Math.sign(rowDistance) * 8 + Math.sign(columnDistance);
-  for (let index = from + step; index !== to; index += step) {
-    if (board[index]) return false;
-  }
-  return true;
+  return hasClearSlidingPath("bishop", from, to, index => Boolean(board[index]));
 }
 
 export function moveBishop(board: Board, from: number, to: number): Board {
