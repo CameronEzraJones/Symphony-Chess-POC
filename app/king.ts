@@ -1,7 +1,7 @@
 import { backRank, type PieceColor, type PieceType } from "./piece";
 
 export type ChessPiece = { color: PieceColor; type: PieceType; moved?: boolean };
-export type Board = (ChessPiece | null)[];
+export type Board = readonly (ChessPiece | null)[];
 export const squareName = (index: number) => `${"abcdefgh"[index % 8]}${8 - Math.floor(index / 8)}`;
 export function startingBoard(): Board {
   return Array.from({ length: 64 }, (_, i) => {
@@ -11,7 +11,7 @@ export function startingBoard(): Board {
   });
 }
 export function practiceBoard(): Board {
-  const board: Board = Array(64).fill(null);
+  const board: (ChessPiece | null)[] = Array(64).fill(null);
   for (const [index, color, type] of [
     [4, "black", "king"], [0, "black", "rook"], [7, "black", "rook"],
     [60, "white", "king"], [56, "white", "rook"], [63, "white", "rook"],

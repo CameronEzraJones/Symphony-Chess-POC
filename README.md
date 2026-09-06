@@ -4,7 +4,7 @@ A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares a
 
 Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Kings can move to safe adjoining squares, capture undefended enemy pieces, and castle on either side when their movement history, empty path, and attack checks permit it. Opponent attacks include pawns, knights, sliding pieces, and kings, including pinned attackers.
 
-Select a king, then a highlighted destination (mouse, touch, or keyboard). The starting kings are blocked; **Practice king moves** loads an open position for both colors. **Reset board** restores the starting position and movement history. Only kings can be moved, with rooks relocated as part of castling; turn enforcement and other piece moves are outside this issue.
+Select a king, then a highlighted destination (mouse, touch, or keyboard). The starting kings are blocked; **Practice king moves** loads an open position for both colors. **Reset starting position** restores the starting position and movement history. Bishop movement from main is also available: select a bishop to move along an unobstructed diagonal or capture an opposing piece. **Practice bishop movement** opens its diagonals. Rooks relocate as part of castling; turns and other piece moves remain outside scope.
 
 ## Run
 
@@ -46,3 +46,11 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Selected king with safe moves and castling destinations](docs/screenshots/king-legal-moves.png)
 
 ![White kingside and black queenside castling](docs/screenshots/king-castling.png)
+
+## Bishop movement proof
+
+![Selected bishop and legal diagonals](docs/screenshots/bishop-desktop-selected.png)
+
+![Bishop after capturing on g7](docs/screenshots/bishop-desktop-moved.png)
+
+Mobile proof is also captured in `docs/screenshots/bishop-mobile-selected.png` and `bishop-mobile-moved.png`.
