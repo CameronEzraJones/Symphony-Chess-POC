@@ -4,13 +4,33 @@ for (const viewport of [
   { width: 1280, height: 900, name: "desktop" },
   { width: 375, height: 667, name: "mobile" },
 ]) {
-  test(`board geometry and colors on ${viewport.name}`, async ({ page }) => {
+  test(`board geometry, colors and pieces on ${viewport.name}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
     await expect(page).toHaveTitle("Chessboard");
-    await expect(page.getByRole("img", { name: /^Chessboard:/ })).toBeVisible();
+    await expect(page.getByRole("group", { name: /^Chessboard:/ })).toBeVisible();
     const squares = page.locator(".square");
     await expect(squares).toHaveCount(64);
+    const pieces = page.getByRole("img");
+    await expect(pieces).toHaveCount(32);
+    for (const color of ["white", "black"]) {
+      for (const [type, count] of Object.entries({ king: 1, queen: 1, rook: 2, bishop: 2, knight: 2, pawn: 8 })) {
+        await expect(page.getByRole("img", { name: `${color} ${type}`, exact: true })).toHaveCount(count);
+      }
+    }
+    expect(await squares.allTextContents()).toEqual([
+      ..."♜♞♝♛♚♝♞♜", ..."♟♟♟♟♟♟♟♟", ...Array(32).fill(""),
+      ..."♙♙♙♙♙♙♙♙", ..."♖♘♗♕♔♗♘♖",
+    ]);
+    const pieceGeometry = await pieces.evaluateAll(elements => elements.map(element => {
+      const rect = element.getBoundingClientRect();
+      const square = element.parentElement!.getBoundingClientRect();
+      return { fits: rect.width > 0 && rect.height > 0 && rect.x >= square.x && rect.y >= square.y
+        && rect.right <= square.right && rect.bottom <= square.bottom,
+        color: getComputedStyle(element).color };
+    }));
+    for (const piece of pieceGeometry) expect(piece.fits).toBe(true);
+    expect(new Set(pieceGeometry.map(piece => piece.color))).toEqual(new Set(["rgb(255, 255, 255)", "rgb(23, 26, 22)"]));
     const geometry = await squares.evaluateAll(elements => elements.map(element => {
       const rect = element.getBoundingClientRect();
       return { x: rect.x, y: rect.y, width: rect.width, height: rect.height,

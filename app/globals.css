@@ -36,6 +36,27 @@ h1 {
   background: #f0d9b5;
 }
 
+.square {
+  display: grid;
+  place-items: center;
+  container-type: inline-size;
+}
+
+.piece {
+  font-family: "DejaVu Sans", "Segoe UI Symbol", serif;
+  font-size: 75cqi;
+  line-height: 1;
+}
+
+.piece--white {
+  color: #fff;
+  -webkit-text-stroke: 1px #272b26;
+}
+
+.piece--black {
+  color: #171a16;
+}
+
 .square--dark {
   background: #596a50;
 }

@@ -11,8 +11,15 @@ test('home and root layout render the accessible board in a complete document', 
   const html = renderToStaticMarkup(React.createElement(RootLayout, null, React.createElement(Home)));
   assert.match(html, /<html lang="en">/);
   assert.match(html, /<main><h1>Chessboard<\/h1>/);
-  assert.match(html, /role="img" aria-label="Chessboard: 8 by 8 equal squares/);
+  assert.match(html, /role="group" aria-label="Chessboard: 16 white pieces and 16 black pieces/);
   assert.equal((html.match(/class="square square--/g) || []).length, 64);
-  assert.equal((html.match(/aria-hidden="true"/g) || []).length, 64);
+  assert.equal((html.match(/class="piece piece--/g) || []).length, 32);
+  const types = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
+  for (const [color, symbols] of [['white', '♔♕♖♗♘♙'], ['black', '♚♛♜♝♞♟']]) {
+    [...symbols].forEach((symbol, index) => {
+      const markup = `class="piece piece--${color}" role="img" aria-label="${color} ${types[index]}">${symbol}</span>`;
+      assert.equal(html.split(markup).length - 1, [1, 1, 2, 2, 2, 8][index]);
+    });
+  }
   assert.equal(metadata.title, 'Chessboard');
 });
