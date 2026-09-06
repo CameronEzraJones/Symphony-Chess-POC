@@ -1,9 +1,9 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { default: Chessboard } = require('../../.test-build/chessboard.js');
+const { BoardView: Chessboard } = require('../../.test-build/chessboard.js');
 
 test('board has 64 squares, with both axes alternating and light on each playerâ€™s right', () => {
-  const board = Chessboard();
+  const board = Chessboard({});
   const squares = board.props.children;
   assert.equal(squares.length, 64);
   const colors = squares.map(square => square.props.className);
@@ -25,7 +25,7 @@ test('board has 64 squares, with both axes alternating and light on each playerâ
 
 
 test('starting board has exactly the required army for each color', () => {
-  const squares = Chessboard().props.children;
+  const squares = Chessboard({}).props.children;
   const pieces = squares.map(square => square.props.children).filter(Boolean);
   assert.equal(pieces.length, 32);
   for (const color of ['white', 'black']) {
