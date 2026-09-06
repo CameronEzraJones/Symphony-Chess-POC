@@ -11,7 +11,7 @@ test('home and root layout render the accessible board in a complete document', 
   const html = renderToStaticMarkup(React.createElement(RootLayout, null, React.createElement(Home)));
   assert.match(html, /<html lang="en">/);
   assert.match(html, /<main><h1>Chessboard<\/h1>/);
-  assert.match(html, /role="group" aria-label="Chessboard: 16 white pieces and 16 black pieces/);
+  assert.match(html, /role="group" aria-label="Chessboard: select a queen/);
   assert.equal((html.match(/class="square square--/g) || []).length, 64);
   assert.equal((html.match(/class="piece piece--/g) || []).length, 32);
   const types = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
