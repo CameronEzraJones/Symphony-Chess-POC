@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Chessboard from "./chessboard";
+import PawnGame from "./pawn-game";
 import { moveBishop, practiceBoard, squareName, startingBoard } from "./bishop";
 
 export default function BishopGame() {
+  const [practice, setPractice] = useState(false);
+  const [reset, setReset] = useState(0);
   const [board, setBoard] = useState(startingBoard);
   const [selected, setSelected] = useState<number | null>(null);
   const [message, setMessage] = useState("Select a bishop, then a highlighted diagonal square.");
@@ -36,18 +39,23 @@ export default function BishopGame() {
     <>
       <div className="board-controls">
         <button type="button" onClick={() => {
+          setPractice(true);
           setBoard(practiceBoard());
           setSelected(null);
           setMessage("Practice position. Either bishop can move; the pawn is a blocker.");
         }}>Practice bishop movement</button>
         <button type="button" onClick={() => {
+          setPractice(false);
+          setReset(value => value + 1);
           setBoard(startingBoard());
           setSelected(null);
           setMessage("Starting position. Bishops are blocked by pawns.");
         }}>Reset starting position</button>
       </div>
+      {practice ? <>
       <Chessboard board={board} selected={selected} onSquare={selectSquare} />
       <p className="board-status" role="status">{message}</p>
+      </> : <PawnGame key={reset} />}
     </>
   );
 }

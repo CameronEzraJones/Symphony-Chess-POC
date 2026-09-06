@@ -90,6 +90,7 @@ for (const mobile of [false, true]) {
     await page.getByRole("button", { name: "Reset starting position" }).click();
     await expect(page.getByRole("img")).toHaveCount(32);
     await activate("a2");
-    await expect(page.getByRole("status")).toHaveText("Select a bishop to move.");
+    await expect(square("a2")).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("status")).toContainText("White to move");
   });
 }

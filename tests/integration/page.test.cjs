@@ -11,7 +11,7 @@ test('home and root layout render the accessible board in a complete document', 
   const html = renderToStaticMarkup(React.createElement(RootLayout, null, React.createElement(Home)));
   assert.match(html, /<html lang="en">/);
   assert.match(html, /<main><h1>Chessboard<\/h1>/);
-  assert.match(html, /role="group" aria-label="Chessboard: select a bishop/);
+  assert.match(html, /role="group" aria-label="Chessboard: pawn movement/);
   assert.equal((html.match(/class="square square--/g) || []).length, 64);
   assert.equal((html.match(/class="piece piece--/g) || []).length, 32);
   const types = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
@@ -22,6 +22,17 @@ test('home and root layout render the accessible board in a complete document', 
     });
   }
   assert.equal(metadata.title, 'Chessboard');
+});
+
+const { movePawn, startingPosition } = require('../../.test-build/pawn.js');
+const { default: Chessboard } = require('../../.test-build/pawn-game.js');
+test('a moved position renders updated squares, pieces and turn together', () => {
+  const position = movePawn(startingPosition(), 52, 36);
+  const html = renderToStaticMarkup(React.createElement(Chessboard, { initialPosition: position }));
+  assert.match(html, /aria-label="e2: empty"/);
+  assert.match(html, /aria-label="e4: white pawn"/);
+  assert.match(html, /Black to move/);
+  assert.doesNotMatch(html, /their starting positions/);
 });
 
 test('bishop rules drive accessible selection, destinations and the rendered move', () => {

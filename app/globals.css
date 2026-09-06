@@ -101,3 +101,21 @@ h1 {
   max-width: 640px;
   text-align: center;
 }
+
+.square:disabled { cursor: default; }
+.instructions, [role="status"] { margin: 0; text-align: center; }
+.promotion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.promotion button {
+  padding: 8px 12px;
+  border: 1px solid #272b26;
+  border-radius: 4px;
+  background: #fff;
+  text-transform: capitalize;
+  cursor: pointer;
+}
