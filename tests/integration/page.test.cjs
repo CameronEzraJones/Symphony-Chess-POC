@@ -23,3 +23,16 @@ test('home and root layout render the accessible board in a complete document', 
   }
   assert.equal(metadata.title, 'Chessboard');
 });
+
+test('legal king transition renders relocated king and rook with accessible square names', () => {
+  const { BoardView } = require('../../.test-build/chessboard.js');
+  const { practiceBoard, moveKing, kingMoves } = require('../../.test-build/king.js');
+  const board = practiceBoard();
+  const selected = renderToStaticMarkup(React.createElement(BoardView, {board,selected:60,moves:kingMoves(board,60)}));
+  assert.match(selected, /aria-label="g1: empty, legal move"/);
+  const html = renderToStaticMarkup(React.createElement(BoardView, {board:moveKing(board,60,62)}));
+  assert.match(html, /aria-label="g1: white king"/);
+  assert.match(html, /aria-label="f1: white rook"/);
+  assert.match(html, /aria-label="h1: empty"/);
+  assert.match(html, /aria-label="e1: empty"/);
+});

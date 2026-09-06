@@ -2,7 +2,9 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Movement and game rules are not implemented.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Kings can move to safe adjoining squares, capture undefended enemy pieces, and castle on either side when their movement history, empty path, and attack checks permit it. Opponent attacks include pawns, knights, sliding pieces, and kings, including pinned attackers.
+
+Select a king, then a highlighted destination (mouse, touch, or keyboard). The starting kings are blocked; **Practice king moves** loads an open position for both colors. **Reset board** restores the starting position and movement history. Only kings can be moved, with rooks relocated as part of castling; turn enforcement and other piece moves are outside this issue.
 
 ## Run
 
@@ -38,3 +40,9 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Desktop board with all 32 pieces](docs/screenshots/chessboard-desktop.png)
 
 ![Mobile board with all 32 pieces](docs/screenshots/chessboard-mobile.png)
+
+## King movement proof
+
+![Selected king with safe moves and castling destinations](docs/screenshots/king-legal-moves.png)
+
+![White kingside and black queenside castling](docs/screenshots/king-castling.png)

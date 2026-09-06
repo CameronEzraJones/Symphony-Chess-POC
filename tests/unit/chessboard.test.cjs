@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { default: Chessboard } = require('../../.test-build/chessboard.js');
+const { BoardView: Chessboard } = require('../../.test-build/chessboard.js');
 
 test('board has 64 squares, with both axes alternating and light on each player’s right', () => {
   const board = Chessboard();

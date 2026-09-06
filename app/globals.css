@@ -60,3 +60,11 @@ h1 {
 .square--dark {
   background: #596a50;
 }
+
+.square { border: 0; padding: 0; cursor: pointer; }
+.square[aria-pressed="true"] { box-shadow: inset 0 0 0 4px #145eab; }
+.square[data-legal="true"] { box-shadow: inset 0 0 0 4px #e7b400; }
+.square:focus-visible { outline: 3px solid #145eab; outline-offset: -3px; z-index: 1; }
+.controls { display: flex; gap: 12px; }
+.controls button { border: 1px solid; border-radius: 4px; padding: 8px; cursor: pointer; }
+p[role="status"] { margin: 0; max-width: 640px; text-align: center; }
