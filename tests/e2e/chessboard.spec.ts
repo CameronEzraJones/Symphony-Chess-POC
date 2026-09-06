@@ -51,3 +51,45 @@ for (const viewport of [
     await page.screenshot({ path: `docs/screenshots/chessboard-${viewport.name}.png`, fullPage: true });
   });
 }
+
+for (const mobile of [false, true]) {
+  test(`bishop interaction with ${mobile ? "touch" : "keyboard"}`, async ({ page }) => {
+    await page.setViewportSize(mobile ? { width: 375, height: 667 } : { width: 1280, height: 1000 });
+    await page.goto("/");
+    const square = (name: string) => page.getByRole("button", { name: new RegExp(`^${name}:`) });
+    const activate = async (name: string) => {
+      if (mobile) await square(name).tap();
+      else { await square(name).focus(); await page.keyboard.press("Enter"); }
+    };
+    await activate("c1");
+    await activate("e3");
+    await expect(square("c1")).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("status")).toContainText("Invalid move");
+    await page.getByRole("button", { name: "Practice bishop movement" }).click();
+    await activate("d4");
+    await expect(square("g7")).toHaveAttribute("data-legal", "true");
+    await expect(square("a1")).not.toHaveAttribute("data-legal");
+    await page.screenshot({ path: `docs/screenshots/bishop-${mobile ? "mobile" : "desktop"}-selected.png`, fullPage: true });
+    await activate("d5");
+    await expect(square("d4")).toContainText("♗");
+    await activate("b2");
+    await activate("a1");
+    await expect(square("d4")).toContainText("♗");
+    await activate("g7");
+    await expect(square("d4")).toBeEmpty();
+    await expect(square("g7")).toContainText("♗");
+    await expect(page.getByRole("status")).toHaveText("Bishop moved from d4 to g7.");
+    await page.screenshot({ path: `docs/screenshots/bishop-${mobile ? "mobile" : "desktop"}-moved.png`, fullPage: true });
+    await page.getByRole("button", { name: "Practice bishop movement" }).click();
+    await activate("g7");
+    await activate("h8");
+    await expect(square("h8")).toContainText("♝");
+    await activate("h8");
+    await activate("h8");
+    await expect(square("h8")).toHaveAttribute("aria-pressed", "false");
+    await page.getByRole("button", { name: "Reset starting position" }).click();
+    await expect(page.getByRole("img")).toHaveCount(32);
+    await activate("a2");
+    await expect(page.getByRole("status")).toHaveText("Select a bishop to move.");
+  });
+}

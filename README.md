@@ -2,9 +2,11 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. The board remains a static display; there is no gameplay interface.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Other pieces do not move; turns and king safety are outside this movement-only implementation.
 
-`hasClearSlidingPath(type, from, to, isOccupied)` in `app/sliding-path.ts` implements the intervening-piece limitation in FIDE Article 3.5 for bishops, rooks and queens. Squares are row-major indices from 0 (a8) to 63 (h1). It rejects invalid coordinates, zero-length moves, non-sliders and incompatible directions, and returns false if any intervening square is occupied, regardless of color. Occupied endpoints do not block the path. This is a path predicate, not a complete legality check: destination ownership, captures, turns and king safety belong to a future move validator.
+The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces.
+
+`hasClearSlidingPath(type, from, to, isOccupied)` in `app/sliding-path.ts` implements the intervening-piece limitation in FIDE Article 3.5 for bishops, rooks and queens. Squares are row-major indices from 0 (a8) to 63 (h1). It rejects invalid coordinates, zero-length moves, non-sliders and incompatible directions, and returns false if any intervening square is occupied, regardless of color. Occupied endpoints do not block the path. This is a path predicate, not a complete legality check: destination ownership and captures are handled by the bishop validator; turns and king safety remain outside scope. The bishop move validator uses this shared predicate; rook and queen movement interfaces are outside this change.
 
 ## Run
 
@@ -44,3 +46,11 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Mobile board with all 32 pieces](docs/screenshots/chessboard-mobile.png)
 
 ![Browser harness verifying blocked and clear sliding paths](docs/screenshots/sliding-path-verification.png)
+
+## Bishop movement proof
+
+![Selected bishop and legal diagonals](docs/screenshots/bishop-desktop-selected.png)
+
+![Bishop after capturing on g7](docs/screenshots/bishop-desktop-moved.png)
+
+Mobile proof is also captured in `docs/screenshots/bishop-mobile-selected.png` and `bishop-mobile-moved.png`.

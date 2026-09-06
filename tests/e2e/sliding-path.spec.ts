@@ -6,8 +6,8 @@ import type { hasClearSlidingPath } from "../../app/sliding-path";
 test('browser verifies blocked and cleared paths against the rendered board', async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('.square')).toHaveCount(64);
-  // The app is static. Execute the production rule in a browser harness;
-  // do not add a gameplay interface just to demonstrate this isolated rule.
+  // Execute all three sliding-piece rules against rendered occupancy.
+  // Bishop gameplay is also exercised by the interaction tests.
   const compiled = ts.transpileModule(readFileSync('app/sliding-path.ts', 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
   }).outputText;
