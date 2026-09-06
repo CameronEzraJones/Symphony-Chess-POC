@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { moveKnight } from "./knight";
 import Chessboard from "./chessboard";
 import { moveBishop, practiceBoard, squareName, startingBoard } from "./bishop";
 
-export default function BishopGame() {
+export default function BoardGame() {
   const [board, setBoard] = useState(startingBoard);
   const [selected, setSelected] = useState<number | null>(null);
-  const [message, setMessage] = useState("Select a bishop, then a highlighted diagonal square.");
+  const [message, setMessage] = useState("Select a bishop or knight, then a highlighted square.");
 
   function selectSquare(index: number) {
     if (selected !== null) {
@@ -16,19 +17,20 @@ export default function BishopGame() {
         setMessage("Selection cleared.");
         return;
       }
-      const next = moveBishop(board, selected, index);
+      const type = board[selected]!.type;
+      const next = type === "knight" ? moveKnight(board, selected, index) : moveBishop(board, selected, index);
       if (next !== board) {
         setBoard(next);
         setSelected(null);
-        setMessage(`Bishop moved from ${squareName(selected)} to ${squareName(index)}.`);
+        setMessage(`${type === "knight" ? "Knight" : "Bishop"} moved from ${squareName(selected)} to ${squareName(index)}.`);
         return;
       }
     }
-    if (board[index]?.type === "bishop") {
+    if (board[index]?.type === "bishop" || board[index]?.type === "knight") {
       setSelected(index);
-      setMessage(`Bishop on ${squareName(index)} selected. Choose a highlighted diagonal square.`);
+      setMessage(`${board[index]!.type} on ${squareName(index)} selected. Choose a highlighted square.`);
     } else {
-      setMessage(selected === null ? "Select a bishop to move." : "Invalid move. Choose an unobstructed diagonal square.");
+      setMessage(selected === null ? "Select a bishop or knight to move." : "Invalid move. Choose a highlighted square.");
     }
   }
 

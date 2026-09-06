@@ -38,3 +38,19 @@ test('bishop rules drive accessible selection, destinations and the rendered mov
   assert.match(moved, /aria-label="g7: white bishop"/);
   assert.doesNotMatch(moved, /role="img" aria-label="black bishop"/);
 });
+
+test('knight rules drive accessible destinations and rendered captures alongside bishops', () => {
+  const { default: Chessboard } = require('../../.test-build/chessboard.js');
+  const { startingBoard, moveKnight } = require('../../.test-build/knight.js');
+  const board = startingBoard();
+  const html = renderToStaticMarkup(React.createElement(Chessboard, { board, selected: 57 }));
+  assert.match(html, /aria-label="b1: white knight" aria-pressed="true"/);
+  assert.match(html, /aria-label="c3: empty, legal destination"/);
+  assert.match(html, /aria-label="a3: empty, legal destination"/);
+  assert.doesNotMatch(html, /d2: white pawn, legal destination/);
+  const moved = moveKnight(moveKnight(moveKnight(board, 57, 42), 42, 27), 27, 12);
+  const result = renderToStaticMarkup(React.createElement(Chessboard, { board: moved }));
+  assert.match(result, /aria-label="b1: empty"/);
+  assert.match(result, /aria-label="e7: white knight"/);
+  assert.equal((result.match(/role="img"/g) || []).length, 31);
+});
