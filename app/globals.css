@@ -62,26 +62,31 @@ h1 {
 }
 
 .square {
-  border: 0;
   padding: 0;
+  border: 0;
+  min-width: 0;
   cursor: pointer;
 }
 
 .square[aria-pressed="true"] {
-  box-shadow: inset 0 0 0 4px #a54d00;
+  box-shadow: inset 0 0 0 4px #995000;
 }
 
+.square[data-legal],
 .square[data-destination] {
-  box-shadow: inset 0 0 0 3px #286ca0;
+  box-shadow: inset 0 0 0 4px #176a83;
 }
 
 .square:focus-visible {
-  outline: 3px solid #161616;
-  outline-offset: -6px;
+  outline: 3px solid #005fcc;
+  outline-offset: -3px;
+  z-index: 1;
 }
 
 .board-controls {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -95,6 +100,5 @@ h1 {
 .board-status {
   margin: 0;
   max-width: 640px;
-  min-height: 3em;
   text-align: center;
 }

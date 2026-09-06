@@ -1,7 +1,7 @@
 import { backRank, type PieceColor, type PieceType } from "./piece";
 
 export type BoardPiece = { color: PieceColor; type: PieceType };
-export type Board = (BoardPiece | null)[];
+export type Board = readonly (BoardPiece | null)[];
 
 export function startingBoard(): Board {
   return Array.from({ length: 64 }, (_, index) => {
@@ -13,7 +13,7 @@ export function startingBoard(): Board {
 }
 
 export function rookPractice(): Board {
-  const board: Board = Array(64).fill(null);
+  const board: (BoardPiece | null)[] = Array(64).fill(null);
   board[35] = { color: "white", type: "rook" }; // d4
   board[19] = { color: "black", type: "pawn" }; // d6
   board[38] = { color: "white", type: "pawn" }; // g4

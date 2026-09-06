@@ -2,9 +2,9 @@
 
 Select a rook, then a highlighted square on the same rank or file. A rook cannot jump over pieces or land on a friendly piece; landing on an opposing piece captures it. Buttons support mouse, touch, Enter and Space.
 
-The normal starting position remains available. Its rooks are blocked, so **Rook practice** opens a small position with both colors of rook, a friendly blocker on g4 and a capturable black pawn on d6. **Starting position** resets the board and selection.
+The normal starting position remains available. Its rooks are blocked, so **Rook practice** opens a small position with both colors of rook, a friendly blocker on g4 and a capturable black pawn on d6. **Reset starting position** resets the board and selection.
 
-This implements rook movement only, without turn enforcement, check validation, castling or movement for other pieces. Issue #8's title and quoted rook rule determine the scope; its reference to bishop movement is treated as a typo.
+This adds rook movement alongside the existing bishop movement, without turn enforcement, check validation or castling. Issue #8's title and quoted rook rule determine the scope; its reference to bishop movement is treated as a typo.
 
 The Playwright suite captures these screenshots from the production build after verifying the position:
 
