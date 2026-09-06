@@ -8,6 +8,6 @@
     "outDir": ".test-build",
     "sourceMap": true
   },
-  "include": ["app/**/*.tsx"],
+  "include": ["app/**/*.tsx", "app/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -2,7 +2,9 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Movement and game rules are not implemented.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. The board remains a static display; there is no gameplay interface.
+
+`hasClearSlidingPath(type, from, to, isOccupied)` in `app/sliding-path.ts` implements the intervening-piece limitation in FIDE Article 3.5 for bishops, rooks and queens. Squares are row-major indices from 0 (a8) to 63 (h1). It rejects invalid coordinates, zero-length moves, non-sliders and incompatible directions, and returns false if any intervening square is occupied, regardless of color. Occupied endpoints do not block the path. This is a path predicate, not a complete legality check: destination ownership, captures, turns and king safety belong to a future move validator.
 
 ## Run
 
@@ -29,6 +31,8 @@ npm run test:e2e
 
 The end-to-end tests start the production server, verify piece symbols, counts, accessible names, visibility and fit, plus every square's dimensions, position and rendered color on desktop and mobile, and capture desktop and mobile screenshots. To use a locally installed Chrome, set `CHROME_PATH=/path/to/chrome`.
 
+Path tests cover every sliding direction, origin, distance and blocker position. Integration tests use the starting board's pieces. A browser harness executes the same rule against the rendered board and cleared occupancy fixtures, and captures its results below; it does not simulate user moves.
+
 Coverage uses c8/V8 with source maps for all application components. CI publishes measured statement, branch, function and line totals in a `coverage` Check Run using the Symphony marker and the PR head SHA.
 
 ## Screenshots
@@ -38,3 +42,5 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Desktop board with all 32 pieces](docs/screenshots/chessboard-desktop.png)
 
 ![Mobile board with all 32 pieces](docs/screenshots/chessboard-mobile.png)
+
+![Browser harness verifying blocked and clear sliding paths](docs/screenshots/sliding-path-verification.png)
