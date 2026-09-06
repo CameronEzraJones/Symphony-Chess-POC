@@ -2,7 +2,9 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Movement and game rules are not implemented.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Select a piece and then a destination by clicking or using Tab and Enter/Space. Selecting the same square cancels. Friendly destinations are rejected; captures remove the opponent and clear the source in one update.
+
+Article 3.1 movement uses basic piece geometry and blocked paths. Pawns move forward and capture diagonally; attack detection includes empty diagonal squares and remains independent of king safety, including pinned pieces. Turn order, check enforcement, castling, en passant, and promotion are outside this issue; this is a movement demonstrator rather than a complete chess game.
 
 ## Run
 
@@ -38,3 +40,9 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Desktop board with all 32 pieces](docs/screenshots/chessboard-desktop.png)
 
 ![Mobile board with all 32 pieces](docs/screenshots/chessboard-mobile.png)
+
+![Friendly destination rejected](docs/screenshots/friendly-rejection-desktop.png)
+
+![White pawn captures on d5](docs/screenshots/capture-desktop.png)
+
+![Capture on mobile](docs/screenshots/capture-mobile.png)

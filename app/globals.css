@@ -60,3 +60,22 @@ h1 {
 .square--dark {
   background: #596a50;
 }
+
+.square {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.square[aria-pressed="true"], .square:focus-visible {
+  outline: 4px solid #c26708;
+  outline-offset: -4px;
+}
+
+.board-status {
+  margin: 0;
+  max-width: 640px;
+  min-height: 3em;
+  text-align: center;
+}
