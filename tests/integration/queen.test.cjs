@@ -10,7 +10,7 @@ test('movement and board rendering agree on selection, destinations, relocation 
   const render = (position, selected = null) => renderToStaticMarkup(React.createElement(BoardView, { board: position, selected }));
   const selected = render(board, 35);
   assert.match(selected, /aria-label="d4: white queen" aria-pressed="true"/);
-  assert.match(selected, /aria-label="a4: empty" aria-pressed="false" data-destination="true"/);
+  assert.match(selected, /aria-label="a4: empty, legal destination" aria-pressed="false" data-destination="true"/);
   assert.match(selected, /aria-label="e6: empty" aria-pressed="false" data-destination="false"/);
   const moved = moveQueen(board, 35, 32);
   assert.match(render(moved), /aria-label="d4: empty"/);

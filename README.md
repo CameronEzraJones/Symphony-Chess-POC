@@ -6,7 +6,11 @@ Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, 
 
 Queens can move any distance along a file, rank or diagonal (FIDE Article 3.4), provided the path is clear. They can capture opposing pieces, cannot land on friendly pieces, and cannot capture kings. Select a queen and then a highlighted destination using clicks, taps, or Tab and Enter/Space. Select the queen again to cancel.
 
-Both queens are blocked in the starting position. **Queen practice** opens a board with a white queen on d4 and a black queen on h8 so either can be moved freely. **Reset starting position** restores all 32 pieces. Other pieces' movement, turn order, check and checkmate are outside this feature.
+Both queens are blocked in the starting position. **Queen practice** opens a board with a white queen on d4 and a black queen on h8 so either can be moved freely. **Reset starting position** restores all 32 pieces. Turn order, check and checkmate are outside this feature.
+
+Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Pieces other than bishops and queens do not move; turns and king safety are outside this movement-only implementation.
+
+The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces.
 
 ## Run
 
@@ -52,3 +56,11 @@ After moving d4 → d7 (file), d7 → a7 (rank), and a7 → f2 (diagonal):
 ![Queen moved to f2](docs/screenshots/queen-moved-desktop.png)
 
 ![Queen movement on mobile](docs/screenshots/queen-selected-mobile.png)
+
+## Bishop movement proof
+
+![Selected bishop and legal diagonals](docs/screenshots/bishop-desktop-selected.png)
+
+![Bishop after capturing on g7](docs/screenshots/bishop-desktop-moved.png)
+
+Mobile proof is also captured in `docs/screenshots/bishop-mobile-selected.png` and `bishop-mobile-moved.png`.

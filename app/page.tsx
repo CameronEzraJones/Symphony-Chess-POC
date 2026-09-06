@@ -1,10 +1,10 @@
-import Chessboard from "./chessboard";
+import BishopGame from "./bishop-game";
 
 export default function Home() {
   return (
     <main>
       <h1>Chessboard</h1>
-      <Chessboard />
+      <BishopGame />
     </main>
   );
 }
