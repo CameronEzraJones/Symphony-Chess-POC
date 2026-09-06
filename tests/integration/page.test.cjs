@@ -39,3 +39,18 @@ test('a captured position renders the moved piece once and removes the opponent'
   assert.equal((html.match(/aria-label="black pawn"/g) || []).length, 7);
   assert.equal((html.match(/aria-label="white pawn"/g) || []).length, 8);
 });
+
+test('bishop rules drive accessible selection, destinations and the rendered move', () => {
+  const { default: Chessboard } = require('../../.test-build/chessboard.js');
+  const { practiceBoard, moveBishop } = require('../../.test-build/bishop.js');
+  const board = practiceBoard();
+  const html = renderToStaticMarkup(React.createElement(Chessboard, { board, selected: 35 }));
+  assert.match(html, /aria-label="d4: white bishop" aria-pressed="true"/);
+  assert.match(html, /aria-label="g7: black bishop, legal destination"/);
+  assert.match(html, /aria-label="b2: white pawn"/);
+  assert.doesNotMatch(html, /a1: empty, legal destination/);
+  const moved = renderToStaticMarkup(React.createElement(Chessboard, { board: moveBishop(board, 35, 14) }));
+  assert.match(moved, /aria-label="d4: empty"/);
+  assert.match(moved, /aria-label="g7: white bishop"/);
+  assert.doesNotMatch(moved, /role="img" aria-label="black bishop"/);
+});

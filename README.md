@@ -6,6 +6,8 @@ Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, 
 
 Article 3.1 movement uses basic piece geometry and blocked paths. Pawns move forward and capture diagonally; attack detection includes empty diagonal squares and remains independent of king safety, including pinned pieces. Turn order, check enforcement, castling, en passant, and promotion are outside this issue; this is a movement demonstrator rather than a complete chess game.
 
+The **Practice bishop movement** control opens diagonals with bishops on d4 and g7 and a friendly blocker on b2. Legal destinations are highlighted for the selected piece. **Reset starting position** restores all 32 pieces.
+
 ## Run
 
 Requires Node.js 22 or later and npm.
@@ -46,3 +48,11 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![White pawn captures on d5](docs/screenshots/capture-desktop.png)
 
 ![Capture on mobile](docs/screenshots/capture-mobile.png)
+
+## Bishop movement proof
+
+![Selected bishop and legal diagonals](docs/screenshots/bishop-desktop-selected.png)
+
+![Bishop after capturing on g7](docs/screenshots/bishop-desktop-moved.png)
+
+Mobile proof is also captured in `docs/screenshots/bishop-mobile-selected.png` and `bishop-mobile-moved.png`.
