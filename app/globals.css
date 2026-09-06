@@ -60,3 +60,29 @@ h1 {
 .square--dark {
   background: #596a50;
 }
+
+button.square {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.square[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 4px #245c9c;
+}
+
+.square[data-destination] {
+  box-shadow: inset 0 0 0 4px #a64b00;
+}
+
+.square:focus-visible {
+  outline: 3px solid #111;
+  outline-offset: -6px;
+}
+
+.move-status {
+  margin: 0;
+  max-width: 640px;
+  text-align: center;
+}

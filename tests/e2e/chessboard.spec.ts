@@ -51,3 +51,44 @@ for (const viewport of [
     await page.screenshot({ path: `docs/screenshots/chessboard-${viewport.name}.png`, fullPage: true });
   });
 }
+
+for (const viewport of [{ width: 1280, height: 900, name: "desktop" }, { width: 375, height: 667, name: "mobile" }]) {
+  test(`knight selection, movement and capture on ${viewport.name}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const square = (name: string) => page.getByRole("button", { name: new RegExp(`^${name}:`) });
+    await square("a2").click();
+    await expect(page.getByRole("status")).toHaveText("Select a knight to move.");
+    await square("b1").click();
+    await expect(page.locator('[data-destination]')).toHaveCount(2);
+    await page.screenshot({ path: `docs/screenshots/knight-selected-${viewport.name}.png`, fullPage: true });
+    await square("d2").click();
+    await expect(square("b1")).toHaveAttribute("aria-pressed", "true");
+    await expect(square("d2")).toContainText("♙");
+    await square("b3").click();
+    await expect(square("b1")).toContainText("♘");
+    await square("b1").click();
+    await expect(page.locator('[data-destination]')).toHaveCount(0);
+    await square("g1").click();
+    await square("b1").click();
+    await square("c3").focus();
+    await page.keyboard.press("Enter");
+    await expect(square("b1")).toBeEmpty();
+    await expect(square("c3")).toContainText("♘");
+    await expect(page.getByRole("status")).toHaveText("Knight moved from b1 to c3.");
+    await page.screenshot({ path: `docs/screenshots/knight-moved-${viewport.name}.png`, fullPage: true });
+    await square("c3").click();
+    await square("d5").click();
+    await square("d5").click();
+    await square("e7").click();
+    await expect(square("e7")).toContainText("♘");
+    await expect(square("d5")).toBeEmpty();
+    await expect(page.getByRole("img")).toHaveCount(31);
+    await square("b8").focus();
+    await page.keyboard.press("Space");
+    await square("a6").focus();
+    await page.keyboard.press("Space");
+    await expect(square("b8")).toBeEmpty();
+    await expect(square("a6")).toContainText("♞");
+  });
+}
