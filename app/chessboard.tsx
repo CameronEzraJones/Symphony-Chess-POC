@@ -1,26 +1,28 @@
-import Piece, { backRank } from "./piece";
+import Piece from "./piece";
+import { type Board, startingBoard, squareName } from "./chess";
 
-export default function Chessboard() {
+export default function Chessboard({ board = startingBoard(), selected = null, checkedKing = -1, onSquare }: {
+  board?: Board;
+  selected?: number | null;
+  checkedKing?: number;
+  onSquare?: (index: number) => void;
+} = {}) {
   return (
-    <div
-      className="chessboard"
-      role="group"
-      aria-label="Chessboard: 16 white pieces and 16 black pieces in their starting positions."
-    >
-      {Array.from({ length: 64 }, (_, index) => {
-        const row = Math.floor(index / 8);
-        const column = index % 8;
-        const color = (row + column) % 2 === 0 ? "light" : "dark";
-        const type = row === 0 || row === 7 ? backRank[column]
-          : row === 1 || row === 6 ? "pawn" : null;
-
+    <div className="chessboard" role="group" aria-label="Chessboard: select a piece and its destination.">
+      {board.map((piece, index) => {
+        const color = (Math.floor(index / 8) + index % 8) % 2 === 0 ? "light" : "dark";
         return (
-          <div
+          <button
+            type="button"
             key={index}
             className={`square square--${color}`}
+            aria-label={`${squareName(index)}: ${piece ? `${piece.color} ${piece.type}` : "empty"}${index === checkedKing ? ", in check" : ""}`}
+            aria-pressed={selected === index}
+            data-check={index === checkedKing || undefined}
+            onClick={() => onSquare?.(index)}
           >
-            {type && <Piece color={row < 2 ? "black" : "white"} type={type} />}
-          </div>
+            {piece && <Piece color={piece.color} type={piece.type} />}
+          </button>
         );
       })}
     </div>

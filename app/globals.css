@@ -60,3 +60,21 @@ h1 {
 .square--dark {
   background: #596a50;
 }
+
+.square {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.square[aria-pressed="true"], .square:focus-visible {
+  outline: 4px solid #176ca4;
+  outline-offset: -4px;
+}
+
+.square[data-check] {
+  box-shadow: inset 0 0 0 5px #b32121;
+}
+
+p { margin: 0; text-align: center; }
+[role="alert"] { color: #a11b1b; max-width: 640px; }
