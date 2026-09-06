@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import BishopGame from "./bishop-game";
 import Chessboard from "./chessboard";
 import { isInCheck, opposite, startingBoard, tryMove } from "./chess";
 import type { PieceColor } from "./piece";
 
 export default function Game() {
+  const [practice, setPractice] = useState(false);
   const [board, setBoard] = useState(startingBoard);
   const [turn, setTurn] = useState<PieceColor>("white");
   const [selected, setSelected] = useState<number | null>(null);
@@ -29,9 +31,15 @@ export default function Game() {
     setSelected(null);
   }
 
+  if (practice) return <>
+    <div className="board-controls"><button onClick={() => setPractice(false)}>Return to game</button></div>
+    <BishopGame />
+  </>;
+
   return <>
+    <div className="board-controls"><button onClick={() => setPractice(true)}>Bishop practice</button></div>
     <p role="status">{turn === "white" ? "White" : "Black"} to move{inCheck ? " — Check!" : "."}</p>
-    <Chessboard board={board} selected={selected} onSquare={select}
+    <Chessboard isLegal={(position, from, to) => tryMove(position, turn, from, to) !== null} board={board} selected={selected} onSquare={select}
       checkedKing={inCheck ? board.findIndex(piece => piece?.color === turn && piece.type === "king") : -1} />
     <p className="move-help">Select a piece, then its destination.</p>
     {error && <p role="alert">{error}</p>}

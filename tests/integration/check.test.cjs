@@ -17,6 +17,11 @@ test('played check, rejected reply, and legal block integrate with accessible bo
   const html = renderToStaticMarkup(React.createElement(Chessboard, { board, checkedKing: sq('e8') }));
   assert.match(html, /aria-label="e8: black king, in check"/);
   assert.match(html, /data-check="true"/);
+  const isLegal = (position, from, to) => tryMove(position, 'black', from, to) !== null;
+  const blockedReply = renderToStaticMarkup(React.createElement(Chessboard, { board, selected: sq('a7'), isLegal }));
+  assert.doesNotMatch(blockedReply, /a6: empty, legal destination/);
+  const legalReply = renderToStaticMarkup(React.createElement(Chessboard, { board, selected: sq('c7'), isLegal }));
+  assert.match(legalReply, /c6: empty, legal destination/);
   board = tryMove(board, 'black', sq('c7'), sq('c6'));
   assert.ok(board);
   assert.equal(isInCheck(board, 'black'), false);

@@ -12,12 +12,16 @@ test("check is announced, unrelated replies are rejected, and blocking clears ch
   await move("f1", "b5");
   await expect(page.getByRole("status")).toHaveText("Black to move — Check!");
   await expect(square("e8")).toHaveAttribute("data-check", "true");
-  await move("a7", "a6");
+  await square("a7").click();
+  await expect(square("a6")).not.toHaveAttribute("data-legal");
+  await square("a6").click();
   await expect(page.getByRole("main").getByRole("alert")).toContainText("Illegal move");
   await expect(square("a7")).toHaveAccessibleName("a7: black pawn");
   await expect(square("a6")).toHaveAccessibleName("a6: empty");
   await page.screenshot({ path: "docs/screenshots/check-rejected.png", fullPage: true });
-  await move("c7", "c6");
+  await square("c7").click();
+  await expect(square("c6")).toHaveAttribute("data-legal", "true");
+  await square("c6").click();
   await expect(page.getByRole("status")).toHaveText("White to move.");
   await expect(page.locator("[data-check]")).toHaveCount(0);
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
@@ -39,4 +43,25 @@ test("a pinned piece cannot expose its king, including with keyboard controls", 
   await expect(square("c6")).toHaveAccessibleName("c6: black knight");
   await expect(page.getByRole("status")).toHaveText("Black to move.");
   await page.screenshot({ path: "docs/screenshots/check-pinned.png", fullPage: true });
+});
+
+
+test("bishop practice preserves the game position and checking enforcement on return", async ({ page }) => {
+  await page.goto("/");
+  const square = (name: string) => page.getByRole("button", { name: new RegExp(`^${name}:`) });
+  for (const [from, to] of [["e2", "e4"], ["d7", "d5"], ["f1", "b5"]]) {
+    await square(from).click();
+    await square(to).click();
+  }
+  await page.getByRole("button", { name: "Bishop practice", exact: true }).click();
+  await page.getByRole("button", { name: "Practice bishop movement" }).click();
+  await square("d4").click();
+  await square("g7").click();
+  await expect(square("g7")).toContainText("♗");
+  await page.getByRole("button", { name: "Return to game" }).click();
+  await expect(page.getByRole("status")).toHaveText("Black to move — Check!");
+  await expect(square("b5")).toContainText("♗");
+  await square("a7").click();
+  await square("a6").click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("Illegal move");
 });

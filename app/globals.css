@@ -62,19 +62,46 @@ h1 {
 }
 
 .square {
-  border: 0;
   padding: 0;
+  border: 0;
+  min-width: 0;
   cursor: pointer;
 }
 
-.square[aria-pressed="true"], .square:focus-visible {
-  outline: 4px solid #176ca4;
-  outline-offset: -4px;
+.square[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 4px #995000;
 }
 
-.square[data-check] {
-  box-shadow: inset 0 0 0 5px #b32121;
+.square[data-legal] {
+  box-shadow: inset 0 0 0 4px #176a83;
 }
 
+.square:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: -3px;
+  z-index: 1;
+}
+
+.board-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.board-controls button {
+  border: 1px solid #596a50;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.board-status {
+  margin: 0;
+  max-width: 640px;
+  text-align: center;
+}
+
+.square[data-check] { box-shadow: inset 0 0 0 5px #b32121; }
 p { margin: 0; text-align: center; }
 [role="alert"] { color: #a11b1b; max-width: 640px; }
