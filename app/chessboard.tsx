@@ -1,7 +1,8 @@
+import { canMoveQueen } from "./queen";
 import Piece from "./piece";
 import { type Board, canMoveBishop, squareName, startingBoard } from "./bishop";
 
-export default function Chessboard({ board = startingBoard(), selected = null, onSquare }: {
+export function BoardView({ board = startingBoard(), selected = null, onSquare }: {
   board?: Board;
   selected?: number | null;
   onSquare?: (index: number) => void;
@@ -10,13 +11,13 @@ export default function Chessboard({ board = startingBoard(), selected = null, o
     <div
       className="chessboard"
       role="group"
-      aria-label="Chessboard: select a bishop, then a diagonal destination."
+      aria-label="Chessboard: select a bishop or queen, then a highlighted destination."
     >
       {board.map((piece, index) => {
         const row = Math.floor(index / 8);
         const column = index % 8;
         const color = (row + column) % 2 === 0 ? "light" : "dark";
-        const legal = selected !== null && canMoveBishop(board, selected, index);
+        const legal = selected !== null && (canMoveBishop(board, selected, index) || canMoveQueen(board, selected, index));
         return (
           <button
             type="button"
@@ -24,6 +25,7 @@ export default function Chessboard({ board = startingBoard(), selected = null, o
             className={`square square--${color}`}
             aria-label={`${squareName(index)}: ${piece ? `${piece.color} ${piece.type}` : "empty"}${legal ? ", legal destination" : ""}`}
             aria-pressed={selected === index}
+            data-destination={legal}
             data-legal={legal || undefined}
             onClick={() => onSquare?.(index)}
           >
@@ -34,3 +36,5 @@ export default function Chessboard({ board = startingBoard(), selected = null, o
     </div>
   );
 }
+
+export default BoardView;

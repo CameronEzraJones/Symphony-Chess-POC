@@ -2,7 +2,13 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Other pieces do not move; turns and king safety are outside this movement-only implementation.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names.
+
+Queens can move any distance along a file, rank or diagonal (FIDE Article 3.4), provided the path is clear. They can capture opposing pieces, cannot land on friendly pieces, and cannot capture kings. Select a queen and then a highlighted destination using clicks, taps, or Tab and Enter/Space. Select the queen again to cancel.
+
+Both queens are blocked in the starting position. **Queen practice** opens a board with a white queen on d4 and a black queen on h8 so either can be moved freely. **Reset starting position** restores all 32 pieces. Turn order, check and checkmate are outside this feature.
+
+Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Pieces other than bishops and queens do not move; turns and king safety are outside this movement-only implementation.
 
 The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces.
 
@@ -40,6 +46,16 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Desktop board with all 32 pieces](docs/screenshots/chessboard-desktop.png)
 
 ![Mobile board with all 32 pieces](docs/screenshots/chessboard-mobile.png)
+
+Queen selected on d4, with available file, rank and diagonal destinations outlined:
+
+![Queen movement destinations](docs/screenshots/queen-selected-desktop.png)
+
+After moving d4 → d7 (file), d7 → a7 (rank), and a7 → f2 (diagonal):
+
+![Queen moved to f2](docs/screenshots/queen-moved-desktop.png)
+
+![Queen movement on mobile](docs/screenshots/queen-selected-mobile.png)
 
 ## Bishop movement proof
 
