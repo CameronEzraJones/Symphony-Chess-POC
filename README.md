@@ -2,9 +2,9 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Other pieces do not move; turns and king safety are outside this movement-only implementation.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Rooks move along unobstructed ranks and files with the same blocking and capture rules. Select either a rook or bishop to move. Other pieces do not move; turns and king safety are outside this movement-only implementation.
 
-The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces.
+The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Rook practice** opens a position for exploring ranks, files, blocking and captures; see [rook movement proof](docs/rook-movement.md). **Reset starting position** restores all 32 pieces.
 
 ## Run
 

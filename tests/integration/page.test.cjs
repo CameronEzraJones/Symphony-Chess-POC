@@ -11,7 +11,7 @@ test('home and root layout render the accessible board in a complete document', 
   const html = renderToStaticMarkup(React.createElement(RootLayout, null, React.createElement(Home)));
   assert.match(html, /<html lang="en">/);
   assert.match(html, /<main><h1>Chessboard<\/h1>/);
-  assert.match(html, /role="group" aria-label="Chessboard: select a bishop/);
+  assert.match(html, /role="group" aria-label="Chessboard: select a rook or bishop/);
   assert.equal((html.match(/class="square square--/g) || []).length, 64);
   assert.equal((html.match(/class="piece piece--/g) || []).length, 32);
   const types = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
@@ -37,4 +37,19 @@ test('bishop rules drive accessible selection, destinations and the rendered mov
   assert.match(moved, /aria-label="d4: empty"/);
   assert.match(moved, /aria-label="g7: white bishop"/);
   assert.doesNotMatch(moved, /role="img" aria-label="black bishop"/);
+});
+
+test('movement state renders source, captured piece, destination and available moves consistently', () => {
+  const { BoardView } = require('../../.test-build/chessboard.js');
+  const { rookPractice, moveRook } = require('../../.test-build/movement.js');
+  const board = rookPractice();
+  const before = renderToStaticMarkup(React.createElement(BoardView, { board, selected: 35 }));
+  assert.match(before, /aria-label="d6: black pawn, available move"/);
+  assert.match(before, /aria-label="g4: white pawn"/);
+  assert.doesNotMatch(before, /aria-label="d7: empty, available move"/);
+  const after = renderToStaticMarkup(React.createElement(BoardView, { board: moveRook(board, 35, 19) }));
+  assert.match(after, /aria-label="d4: empty"/);
+  assert.match(after, /aria-label="d6: white rook"/);
+  assert.doesNotMatch(after, /aria-label="black pawn"/);
+  assert.equal((after.match(/class="piece piece--/g) || []).length, 3);
 });
