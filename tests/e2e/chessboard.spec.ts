@@ -52,15 +52,57 @@ for (const viewport of [
   });
 }
 
+for (const mobile of [false, true]) {
+  test(`bishop interaction with ${mobile ? "touch" : "keyboard"}`, async ({ page }) => {
+    await page.setViewportSize(mobile ? { width: 375, height: 667 } : { width: 1280, height: 1000 });
+    await page.goto("/");
+    const square = (name: string) => page.getByRole("button", { name: new RegExp(`^${name}:`) });
+    const activate = async (name: string) => {
+      if (mobile) await square(name).tap();
+      else { await square(name).focus(); await page.keyboard.press("Enter"); }
+    };
+    await activate("c1");
+    await activate("e3");
+    await expect(square("c1")).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("status")).toContainText("Invalid move");
+    await page.getByRole("button", { name: "Practice bishop movement" }).click();
+    await activate("d4");
+    await expect(square("g7")).toHaveAttribute("data-legal", "true");
+    await expect(square("a1")).not.toHaveAttribute("data-legal");
+    await page.screenshot({ path: `docs/screenshots/bishop-${mobile ? "mobile" : "desktop"}-selected.png`, fullPage: true });
+    await activate("d5");
+    await expect(square("d4")).toContainText("♗");
+    await activate("b2");
+    await activate("a1");
+    await expect(square("d4")).toContainText("♗");
+    await activate("g7");
+    await expect(square("d4")).toBeEmpty();
+    await expect(square("g7")).toContainText("♗");
+    await expect(page.getByRole("status")).toHaveText("Bishop moved from d4 to g7.");
+    await page.screenshot({ path: `docs/screenshots/bishop-${mobile ? "mobile" : "desktop"}-moved.png`, fullPage: true });
+    await page.getByRole("button", { name: "Practice bishop movement" }).click();
+    await activate("g7");
+    await activate("h8");
+    await expect(square("h8")).toContainText("♝");
+    await activate("h8");
+    await activate("h8");
+    await expect(square("h8")).toHaveAttribute("aria-pressed", "false");
+    await page.getByRole("button", { name: "Reset starting position" }).click();
+    await expect(page.getByRole("img")).toHaveCount(32);
+    await activate("a2");
+    await expect(page.getByRole("status")).toHaveText("Select a bishop or knight to move.");
+  });
+}
+
 for (const viewport of [{ width: 1280, height: 900, name: "desktop" }, { width: 375, height: 667, name: "mobile" }]) {
   test(`knight selection, movement and capture on ${viewport.name}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
     const square = (name: string) => page.getByRole("button", { name: new RegExp(`^${name}:`) });
     await square("a2").click();
-    await expect(page.getByRole("status")).toHaveText("Select a knight to move.");
+    await expect(page.getByRole("status")).toHaveText("Select a bishop or knight to move.");
     await square("b1").click();
-    await expect(page.locator('[data-destination]')).toHaveCount(2);
+    await expect(page.locator('[data-legal]')).toHaveCount(2);
     await page.screenshot({ path: `docs/screenshots/knight-selected-${viewport.name}.png`, fullPage: true });
     await square("d2").click();
     await expect(square("b1")).toHaveAttribute("aria-pressed", "true");
@@ -68,7 +110,7 @@ for (const viewport of [{ width: 1280, height: 900, name: "desktop" }, { width: 
     await square("b3").click();
     await expect(square("b1")).toContainText("♘");
     await square("b1").click();
-    await expect(page.locator('[data-destination]')).toHaveCount(0);
+    await expect(page.locator('[data-legal]')).toHaveCount(0);
     await square("g1").click();
     await square("b1").click();
     await square("c3").focus();

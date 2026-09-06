@@ -3,6 +3,7 @@ import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests/e2e",
   use: {
+    hasTouch: true,
     baseURL: "http://127.0.0.1:3000",
     launchOptions: process.env.CHROME_PATH
       ? { executablePath: process.env.CHROME_PATH }
