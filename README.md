@@ -4,7 +4,9 @@ A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares a
 
 Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Pawns implement Article 3.7: single advances, initial double advances through empty squares, diagonal captures, immediate en passant, and mandatory promotion to a queen, rook, bishop or knight of the same color.
 
-Select a pawn and then a destination with the mouse, touch, or Tab and Enter/Space. Turns alternate starting with White. Choose a promotion piece to complete a move to the last rank. Refresh to restart. Only pawn movement is implemented; other pieces remain stationary, and check/checkmate and king-safety validation are outside this feature.
+Select a pawn or bishop and then a destination with the mouse, touch, or Tab and Enter/Space. Turns alternate starting with White. Choose a promotion piece to complete a move to the last rank. Use **Reset starting position** to restart. Bishops move along unobstructed diagonals and capture opponents; other pieces remain stationary, and check/checkmate and king-safety validation are outside this feature.
+
+Use **Practice bishop movement** for the existing free-move bishop exercise (either color can move). Reset returns to the starting position with alternating turns.
 
 ## Run
 
@@ -46,3 +48,7 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Mandatory promotion choice](docs/screenshots/pawn-promotion-choice.png)
 
 ![Completed promotion to a white knight on a8](docs/screenshots/pawn-promoted.png)
+
+![Selected bishop and legal diagonals](docs/screenshots/bishop-desktop-selected.png)
+
+![Bishop after capturing on g7](docs/screenshots/bishop-desktop-moved.png)

@@ -67,3 +67,18 @@ test('blocked advances and expired en passant leave the board and turn unchanged
   await expect(square(page, 'e5')).toHaveAttribute('aria-label', 'e5: white pawn');
   await expect(page.getByRole('status')).toContainText('White to move. That pawn cannot move');
 });
+
+test('pawn advances free bishops and bishop moves consume turns', async ({ page }) => {
+  await page.goto('/');
+  for (const [from, to] of [['e2', 'e4'], ['d7', 'd5'], ['f1', 'c4']]) await move(page, from, to);
+  await expect(square(page, 'f1')).toHaveAttribute('aria-label', 'f1: empty');
+  await expect(square(page, 'c4')).toHaveAttribute('aria-label', 'c4: white bishop');
+  await expect(page.getByRole('status')).toContainText('Black to move');
+  await move(page, 'c8', 'e6');
+  await expect(square(page, 'e6')).toHaveAttribute('aria-label', 'e6: black bishop');
+  await expect(page.getByRole('status')).toContainText('White to move');
+  await page.getByRole('button', { name: 'Reset starting position' }).click();
+  await expect(square(page, 'e2')).toHaveAttribute('aria-label', 'e2: white pawn');
+  await expect(square(page, 'f1')).toHaveAttribute('aria-label', 'f1: white bishop');
+  await expect(page.getByRole('status')).toContainText('White to move');
+});
