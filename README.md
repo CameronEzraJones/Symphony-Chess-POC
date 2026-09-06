@@ -2,9 +2,9 @@
 
 A responsive 8 × 8 chessboard implementing FIDE Article 2.1: 64 equal squares alternate light and dark, with a light square at the near right corner for either player (bottom-right and top-left on screen).
 
-Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Select a bishop and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Other pieces do not move; turns and king safety are outside this movement-only implementation.
+Each side has the 16 pieces specified in FIDE Article 2.2: one king, one queen, two rooks, two bishops, two knights, and eight pawns, displayed in their starting positions. Pieces use the specified Unicode symbols, light/dark styling, and accessible names. Bishops can move any distance along an unobstructed diagonal, capture opposing pieces, and cannot land on friendly pieces. Normal play supports ordinary moves for every piece, alternating turns, and king safety under FIDE Article 3.9. Select a piece and then a highlighted destination using clicks, touch, or Tab and Enter/Space. Check is announced and the king highlighted; moves that expose or leave your king in check are rejected. Pinned opposing pieces still attack squares. Castling, en passant, promotion, and game-ending rules are outside this feature.
 
-The starting position is preserved. Use **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces.
+Use **Bishop practice** to explore bishop movement without turns or kings. Within this mode, **Practice bishop movement** to open the diagonals: a white bishop on d4, a black bishop on g7, and a friendly blocker on b2. **Reset starting position** restores all 32 pieces in practice. **Return to game** resumes the normal game with its position and turn preserved.
 
 ## Run
 
@@ -48,3 +48,11 @@ Each CI run uploads desktop and mobile PNG screenshots in the `chessboard-screen
 ![Bishop after capturing on g7](docs/screenshots/bishop-desktop-moved.png)
 
 Mobile proof is also captured in `docs/screenshots/bishop-mobile-selected.png` and `bishop-mobile-moved.png`.
+
+## Checking proof
+
+![Check and rejected reply](docs/screenshots/check-rejected.png)
+
+![Check resolved by blocking](docs/screenshots/check-resolved.png)
+
+![Pinned knight move rejected](docs/screenshots/check-pinned.png)

@@ -101,3 +101,7 @@ h1 {
   max-width: 640px;
   text-align: center;
 }
+
+.square[data-check] { box-shadow: inset 0 0 0 5px #b32121; }
+p { margin: 0; text-align: center; }
+[role="alert"] { color: #a11b1b; max-width: 640px; }

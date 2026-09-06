@@ -61,6 +61,7 @@ for (const mobile of [false, true]) {
       if (mobile) await square(name).tap();
       else { await square(name).focus(); await page.keyboard.press("Enter"); }
     };
+    await page.getByRole("button", { name: "Bishop practice", exact: true }).click();
     await activate("c1");
     await activate("e3");
     await expect(square("c1")).toHaveAttribute("aria-pressed", "true");
@@ -91,5 +92,7 @@ for (const mobile of [false, true]) {
     await expect(page.getByRole("img")).toHaveCount(32);
     await activate("a2");
     await expect(page.getByRole("status")).toHaveText("Select a bishop to move.");
+    await page.getByRole("button", { name: "Return to game" }).click();
+    await expect(page.getByRole("status")).toHaveText("White to move.");
   });
 }
