@@ -53,6 +53,41 @@ for (const viewport of [
 }
 
 for (const mobile of [false, true]) {
+  test(`selection, friendly rejection and capture with ${mobile ? 'mobile clicks' : 'keyboard'}`, async ({ page }) => {
+    if (mobile) await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+    const square = (name: string) => page.getByRole('button', { name: new RegExp(`^${name}:`) });
+    const select = async (name: string) => {
+      if (mobile) await square(name).click();
+      else { await square(name).focus(); await page.keyboard.press('Enter'); }
+    };
+    await select('e4');
+    await expect(page.locator('[aria-pressed="true"]')).toHaveCount(0);
+    await select('e2');
+    await select('e1');
+    await expect(page.getByRole('status')).toHaveText('You cannot move onto a piece of the same colour.');
+    await expect(square('e2')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('img')).toHaveCount(32);
+    await page.screenshot({ path: `docs/screenshots/friendly-rejection-${mobile ? 'mobile' : 'desktop'}.png`, fullPage: true });
+    await select('e5');
+    await expect(page.getByRole('status')).toHaveText('That piece cannot move to this square.');
+    await select('e2');
+    await expect(square('e2')).toHaveAttribute('aria-pressed', 'false');
+    await select('e2'); await select('e4');
+    await expect(square('e2')).toHaveAccessibleName('e2: empty');
+    await select('d7'); await select('d5');
+    await select('e4'); await select('d5');
+    await expect(square('e4')).toHaveAccessibleName('e4: empty');
+    await expect(square('d5')).toHaveAccessibleName('d5: white pawn');
+    await expect(page.getByRole('img')).toHaveCount(31);
+    await expect(page.getByRole('img', { name: 'black pawn', exact: true })).toHaveCount(7);
+    await expect(page.getByRole('status')).toHaveText('e4 to d5: captured black pawn.');
+    await expect(page.getByRole('group')).toHaveAccessibleName('Chessboard: 16 white pieces and 15 black pieces.');
+    await page.screenshot({ path: `docs/screenshots/capture-${mobile ? 'mobile' : 'desktop'}.png`, fullPage: true });
+  });
+}
+
+for (const mobile of [false, true]) {
   test(`bishop interaction with ${mobile ? "touch" : "keyboard"}`, async ({ page }) => {
     await page.setViewportSize(mobile ? { width: 375, height: 667 } : { width: 1280, height: 1000 });
     await page.goto("/");
@@ -64,7 +99,7 @@ for (const mobile of [false, true]) {
     await activate("c1");
     await activate("e3");
     await expect(square("c1")).toHaveAttribute("aria-pressed", "true");
-    await expect(page.getByRole("status")).toContainText("Invalid move");
+    await expect(page.getByRole("status")).toHaveText("That piece cannot move to this square.");
     await page.getByRole("button", { name: "Practice bishop movement" }).click();
     await activate("d4");
     await expect(square("g7")).toHaveAttribute("data-legal", "true");
@@ -78,7 +113,7 @@ for (const mobile of [false, true]) {
     await activate("g7");
     await expect(square("d4")).toBeEmpty();
     await expect(square("g7")).toContainText("♗");
-    await expect(page.getByRole("status")).toHaveText("Bishop moved from d4 to g7.");
+    await expect(page.getByRole("status")).toHaveText("d4 to g7: captured black bishop.");
     await page.screenshot({ path: `docs/screenshots/bishop-${mobile ? "mobile" : "desktop"}-moved.png`, fullPage: true });
     await page.getByRole("button", { name: "Practice bishop movement" }).click();
     await activate("g7");
@@ -90,6 +125,6 @@ for (const mobile of [false, true]) {
     await page.getByRole("button", { name: "Reset starting position" }).click();
     await expect(page.getByRole("img")).toHaveCount(32);
     await activate("a2");
-    await expect(page.getByRole("status")).toHaveText("Select a bishop to move.");
+    await expect(square("a2")).toHaveAttribute("aria-pressed", "true");
   });
 }

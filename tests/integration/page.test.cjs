@@ -11,7 +11,7 @@ test('home and root layout render the accessible board in a complete document', 
   const html = renderToStaticMarkup(React.createElement(RootLayout, null, React.createElement(Home)));
   assert.match(html, /<html lang="en">/);
   assert.match(html, /<main><h1>Chessboard<\/h1>/);
-  assert.match(html, /role="group" aria-label="Chessboard: select a bishop/);
+  assert.match(html, /role="group" aria-label="Chessboard: 16 white pieces and 16 black pieces/);
   assert.equal((html.match(/class="square square--/g) || []).length, 64);
   assert.equal((html.match(/class="piece piece--/g) || []).length, 32);
   const types = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
@@ -22,6 +22,22 @@ test('home and root layout render the accessible board in a complete document', 
     });
   }
   assert.equal(metadata.title, 'Chessboard');
+});
+
+test('a captured position renders the moved piece once and removes the opponent', () => {
+  const { startingBoard, movePiece } = require('../../.test-build/movement.js');
+  const { default: Piece } = require('../../.test-build/piece.js');
+  let board = startingBoard();
+  board = movePiece(board, 52, 36); // e2-e4
+  board = movePiece(board, 11, 27); // d7-d5
+  board = movePiece(board, 36, 27); // e4xd5
+  const html = renderToStaticMarkup(React.createElement('div', null,
+    board.map((piece, index) => React.createElement('div', { key: index, 'data-square': index },
+      piece && React.createElement(Piece, piece)))));
+  assert.match(html, /data-square="27"><span class="piece piece--white" role="img" aria-label="white pawn"/);
+  assert.match(html, /data-square="36"><\/div>/);
+  assert.equal((html.match(/aria-label="black pawn"/g) || []).length, 7);
+  assert.equal((html.match(/aria-label="white pawn"/g) || []).length, 8);
 });
 
 test('bishop rules drive accessible selection, destinations and the rendered move', () => {
